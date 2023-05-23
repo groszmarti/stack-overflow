@@ -8,6 +8,8 @@ import com.codecool.stackoverflowtw.database.Database;
 import java.util.List;
 
 public interface QuestionsDAO {
+    void initializeTables();
+
     void sayHi();
     List<QuestionDTO> getAllQuestions();
     QuestionDTO getQuestionById(int id);

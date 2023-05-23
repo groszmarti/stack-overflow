@@ -6,6 +6,7 @@ import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -25,7 +26,7 @@ public class QuestionController {
 
     @GetMapping("/{id}")
     public QuestionDTO getQuestionById(@PathVariable int id) {
-        return null;
+        return new QuestionDTO(1, "Hello", "Not hello", LocalDateTime.now());
     }
 
     @PostMapping("/")

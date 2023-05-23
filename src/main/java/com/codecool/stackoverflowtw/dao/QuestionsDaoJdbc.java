@@ -5,6 +5,10 @@ import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
 import com.codecool.stackoverflowtw.dao.model.Question;
 import com.codecool.stackoverflowtw.database.Database;
 
+import com.codecool.stackoverflowtw.database.Database;
+import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
+import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
+
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -12,8 +16,23 @@ import java.sql.Statement;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class QuestionsDaoJdbc implements QuestionsDAO {
+
+    private Database database;
+    private Map<String, String> tables;
+    public QuestionsDaoJdbc(Database database) {
+        this.database = database;
+        this.tables = Map.of("question", TableStatements.QUESTION);
+    }
+
+    @Override
+    public void initializeTables() {
+        TableInitializer tableInitializer = new TableInitializer(database, tables);
+        tableInitializer.initialize();
+    }
+
     private Database dataBase;
 
     public QuestionsDaoJdbc(Database dataBase) {
