@@ -7,10 +7,7 @@ import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
 import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
 
-import java.sql.Connection;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
+import java.sql.*;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -93,7 +90,14 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     }
 
     @Override
-    public Boolean deleteQuestion(int id) {
-        return null;
+    public Boolean deleteQuestion(int questionId) {
+        String query = "DELETE FROM question WHERE id =" + questionId;
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
