@@ -1,6 +1,7 @@
 package com.codecool.stackoverflowtw.dao;
 
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
+
 import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
 import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
