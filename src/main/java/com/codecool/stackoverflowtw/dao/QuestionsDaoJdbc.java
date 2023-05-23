@@ -1,10 +1,25 @@
 package com.codecool.stackoverflowtw.dao;
 
+import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
+import com.codecool.stackoverflowtw.dao.model.Question;
+import com.codecool.stackoverflowtw.database.Database;
 
+import java.sql.Connection;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionsDaoJdbc implements QuestionsDAO {
+    private Database dataBase;
+
+    public QuestionsDaoJdbc(Database dataBase) {
+        this.dataBase = dataBase;
+    }
+
     @Override
     public void sayHi() {
         System.out.println("Hi DAO!");
@@ -12,6 +27,24 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public List<QuestionDTO> getAllQuestions() {
+        String query = "SELECT question.id as id, question.title as question FROM question\n" +
+                "ORDER BY question.date DESC";
+        try (Connection connection = dataBase.getConnection();
+             Statement statement = connection.createStatement();
+             ResultSet resultSet = statement.executeQuery(query)) {
+            List<QuestionDTO> questions = new ArrayList<>();
+            while (resultSet.next()) {
+                int id = resultSet.getInt(question.id);
+                String title = resultSet.getString(question.title);
+                String description = resultSet.getString(question.description);
+                LocalDateTime dateAndTime = resultSet.getDate(question.created);
+                QuestionDTO question = new QuestionDTO(id, title, description,dateAndTime);
+                questions.add(question);
+            }
+            return questions;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         return null;
     }
 
@@ -21,7 +54,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     }
 
     @Override
-    public int addNewQuestion() {
+    public int addNewQuestion(NewQuestionDTO question) {
         return 0;
     }
 
