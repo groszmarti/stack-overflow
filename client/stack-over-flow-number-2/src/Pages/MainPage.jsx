@@ -17,12 +17,18 @@ const MainPage = () => {
   }
 
   return <>
-  {allQuestion.map(question => {
-    return <><Link to="question/:id">
-      <div key={question.id}>{`${question.title}`}</div>
-    </Link><div>{question.created}</div>
-    </>
-  } )}
+  
+  {allQuestion.map(question => (
+    <ul key={question.id}>
+      <li>
+        < Link to={`/question/${question.id}`}>
+        {question.title}
+        </Link>
+        {question.created}
+      </li>
+    </ul>
+  ))}
+  
   </>
 };
 

@@ -6,8 +6,8 @@ const Layout = () => (
   <div className="Layout">
     <nav>
       <ul>
-        <li className="grow">
-          <Link to="/">Stack Overflow</Link>
+        <li>
+          <Link to="/" className="grow">Stack Overflow</Link>
         </li>
         <li>
           <Link to="/createQuestion">

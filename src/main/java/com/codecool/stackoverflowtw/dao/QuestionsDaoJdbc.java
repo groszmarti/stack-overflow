@@ -2,6 +2,9 @@ package com.codecool.stackoverflowtw.dao;
 
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
 import java.util.List;
 
 public class QuestionsDaoJdbc implements QuestionsDAO {
@@ -26,7 +29,8 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     }
 
     @Override
-    public Boolean deleteQuestion(int id) {
-        return null;
+    public Boolean deleteQuestion(int questionId) {
+
+        return true;
     }
 }
