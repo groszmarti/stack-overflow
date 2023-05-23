@@ -12,7 +12,7 @@ import java.util.List;
 
 @Service
 public class QuestionService {
-
+    @Autowired
     private QuestionsDAO questionsDAO;
 
     @Autowired
@@ -21,8 +21,7 @@ public class QuestionService {
     }
 
     public List<QuestionDTO> getAllQuestions() {
-        questionsDAO.getAllQuestions();
-        return List.of(new QuestionDTO(1, "example title", "example desc", LocalDateTime.now()));
+        return  questionsDAO.getAllQuestions();
     }
 
     public QuestionDTO getQuestionById(int id) {
