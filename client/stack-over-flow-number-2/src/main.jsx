@@ -5,6 +5,7 @@ import {createBrowserRouter, RouterProvider } from "react-router-dom";
 import Layout from './Pages/Layout/Layout.jsx';
 import MainPage from './Pages/MainPage.jsx';
 import LoginPage from './Pages/LoginPage.jsx';
+import CreateNewQuestion from './Pages/CreateNewQuestion';
 import './index.css'
 
 const router = createBrowserRouter([
@@ -19,7 +20,11 @@ const router = createBrowserRouter([
       {
         path: "/login",
         element: <LoginPage />,
-      }
+      },
+      {
+        path: "/createQuestion",
+        element: <CreateNewQuestion />,
+      },
     
     ],
   },

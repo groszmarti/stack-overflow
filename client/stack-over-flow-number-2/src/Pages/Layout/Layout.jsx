@@ -10,6 +10,11 @@ const Layout = () => (
           <Link to="/">Stack Overflow</Link>
         </li>
         <li>
+          <Link to="/createQuestion">
+            <button type="button">New Question</button>
+          </Link>
+        </li>
+        <li>
           <Link to="/login">
             <button type="button">Login</button>
           </Link>
