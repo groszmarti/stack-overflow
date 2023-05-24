@@ -17,6 +17,7 @@ const ViewQuestion = () => {
   const [question, setQuestion] = useState(null);
 
   let title, description;
+  const answers = [];
 
   useEffect(() => {
     fetch(`/api/questions/${id}`)
@@ -29,16 +30,37 @@ const ViewQuestion = () => {
   }
 
   question.map(element => {
+    console.log(element)
     title = element.title;
     description = element.description;
+    answers.push({
+      answer: element.answer,
+      date: element.answerDate
+    });
+    
   })
-  
 
   return <>
   <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
   <div className="question_card">
     <div>{title}</div>
     <div>{description}</div>
+  </div>
+  <div>
+    {answers === null ? <div>No Answers</div> :
+      
+      answers.map((answer, index) => {
+        let answerDate = answer.date.replace("T", " ");
+
+        return <div key={index}>
+        <div>{answer.answer}</div>
+        <div>{answerDate}</div>
+        </div>
+      }
+        
+      )
+      
+    }
   </div>
   <input></input><br/>
   <button>Add Comment</button>
