@@ -21,7 +21,7 @@ const addAnswer = (id, newAnswer, navigate) => {
     "Content-Type": "application/json",
   },
   body: JSON.stringify(pushAnswer),
-  }).then(res => res.json()).then(() => navigate(`/question/${id}`))
+  }).then(res => res.json()).then(() => window.location.reload())
 }
 
 
@@ -54,8 +54,6 @@ const ViewQuestion = () => {
         date: element.answerDate
       });
     }
-    
-    
   })
 
   return <>
