@@ -90,7 +90,24 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public int addNewQuestion(NewQuestionDTO question) {
+        String query = "INSERT INTO question (title, description, date)" +
+                "VALUES (?, ?, ?)";
+        try {
+            Connection connection = database.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            prepare(question.title(),statement);
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         return 0;
+    }
+
+    private void prepare(String title, PreparedStatement statement) throws SQLException {
+        statement.setString(1, title);
+        statement.setString(2, null);
+        statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
     }
 
     @Override
