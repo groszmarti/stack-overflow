@@ -1,9 +1,19 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
+const deleteQuestion = (id, navigate) => {
+  fetch(`/api/questions/${id}`, {
+    method: 'DELETE',
+  })
+  .then(() => {
+    navigate("/");
+  });
+}
+
 
 const ViewQuestion = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
   const [question, setQuestion] = useState(null);
 
   useEffect(() => {
@@ -17,6 +27,7 @@ const ViewQuestion = () => {
   }
 
   return <>
+  <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
   <div>{question.title}</div>
   <div>{question.description}</div>
   <input></input><br/>

@@ -4,8 +4,8 @@ import { Link, useNavigate } from "react-router-dom";
 const addQuestion = (title, description, navigate) => {
 
   const newQuestion = {
-    'title': title,
-    'description': description
+    title: title,
+    description: description
   }
 
   postQuestion(newQuestion)
@@ -13,7 +13,6 @@ const addQuestion = (title, description, navigate) => {
       navigate("/");
     });
 
-    console.log("Hello")
 }
 
 const postQuestion = (newQuestion) => {
