@@ -66,11 +66,12 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public QuestionDTO getQuestionById(int questionId) {
-        String query = "SELECT * FROM question WHERE id =" + questionId;
+        String query = "SELECT * FROM question WHERE id = ?";
         try (Connection connection = database.getConnection()) {
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, questionId);
+            ResultSet resultSet = statement.executeQuery();
 
             QuestionDTO question = null;
 
