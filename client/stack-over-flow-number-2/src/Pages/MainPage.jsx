@@ -30,7 +30,7 @@ const MainPage = () => {
         </Link>
         </div>
         <div>
-          Number of answer {question.answerCount}
+          Number of Answer {question.answerCount}
         </div>
         <div className='question_date'>
         {questionDate}
