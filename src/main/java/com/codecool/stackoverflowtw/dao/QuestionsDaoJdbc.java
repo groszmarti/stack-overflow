@@ -46,8 +46,8 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     @Override
     public List<QuestionDTO> getAllQuestions() {
         String query = "SELECT question.id, question.title, question.description, question.date, COUNT(answer.id) as answer_count FROM question\n" +
-                "LEFT JOIN answer ON answer.question_id = question.id OR answer.question_id = null\n" +
-                "GROUP BY question.id" +
+                "LEFT JOIN answer ON answer.question_id = question.id\n" +
+                "GROUP BY question.id\n" +
                 "ORDER BY question.date DESC";
         try (Connection connection = database.getConnection()) {
             Statement statement = connection.createStatement();
@@ -76,7 +76,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     public List<QuestionDetailsDTO> getQuestionById(int questionId) {
         String query = "SELECT question.id, question.title, question.description, question.date, answer.answer as answer, answer.date as answer_date FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
-                "WHERE id =" + questionId;
+                "WHERE question.id =" + questionId;
         try (Connection connection = database.getConnection()) {
 
             Statement statement = connection.createStatement();
