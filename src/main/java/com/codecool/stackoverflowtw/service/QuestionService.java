@@ -1,5 +1,6 @@
 package com.codecool.stackoverflowtw.service;
 
+import com.codecool.stackoverflowtw.controller.dto.NewAnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDetailsDTO;
 import com.codecool.stackoverflowtw.dao.QuestionsDAO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
@@ -42,4 +43,8 @@ public class QuestionService {
     }
 
 
+    public int addNewAnswer(int questionId, NewAnswerDTO answer) {
+        questionsDAO.addNewAnswer(questionId, answer);
+        return 1;
+    }
 }
