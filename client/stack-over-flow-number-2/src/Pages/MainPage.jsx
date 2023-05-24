@@ -20,6 +20,7 @@ const MainPage = () => {
   return <>
   {allQuestions.map(question => {
     let questionDate = question.created.replace("T", " ") 
+    console.log(question)
     return <ul key={question.id}>
       <li>
         <div className='question_card'>
@@ -27,6 +28,9 @@ const MainPage = () => {
         < Link to={`/question/${question.id}`}>
         {question.title}
         </Link>
+        </div>
+        <div>
+          Number of answer {question.answerCount}
         </div>
         <div className='question_date'>
         {questionDate}
