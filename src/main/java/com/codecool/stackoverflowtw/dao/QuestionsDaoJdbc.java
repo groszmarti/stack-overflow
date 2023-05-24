@@ -1,5 +1,6 @@
 package com.codecool.stackoverflowtw.dao;
 
+import com.codecool.stackoverflowtw.controller.dto.NewAnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
 
@@ -13,7 +14,6 @@ import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
 import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
 
 import java.sql.*;
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -116,7 +116,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         try {
             Connection connection = database.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
-            prepare(question.title(), question.description(), statement);
+            prepareQuestion(question.title(), question.description(), statement);
             statement.executeUpdate();
         }
         catch (SQLException e) {
@@ -125,7 +125,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         return 1;
     }
 
-    private void prepare(String title, String description, PreparedStatement statement) throws SQLException {
+    private void prepareQuestion(String title, String description, PreparedStatement statement) throws SQLException {
         statement.setString(1, title);
         statement.setString(2, description);
         statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
@@ -133,7 +133,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public Boolean deleteQuestion(int questionId) {
-        String query = "SELECT * FROM question WHERE id = ?";
+        String query = "DELETE FROM question WHERE id = ?";
 
         try (Connection connection = database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
@@ -143,5 +143,27 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+    }
+
+    @Override
+    public int addNewAnswer(int questionId, NewAnswerDTO answer) {
+        String query = "INSERT INTO answer (question_id, answer, date)" +
+                "VALUES (?, ?, ?)";
+        try {
+            Connection connection = database.getConnection();
+            PreparedStatement statement = connection.prepareStatement(query);
+            prepareAnswer(questionId, answer.answer(), statement);
+            statement.executeUpdate();
+        }
+        catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 1;
+    }
+
+    private void prepareAnswer(int questionId, String answer, PreparedStatement statement) throws SQLException {
+        statement.setInt(1, questionId);
+        statement.setString(2, answer);
+        statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
     }
 }

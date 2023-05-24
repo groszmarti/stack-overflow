@@ -1,5 +1,6 @@
 package com.codecool.stackoverflowtw.dao;
 
+import com.codecool.stackoverflowtw.controller.dto.NewAnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDetailsDTO;
@@ -16,4 +17,6 @@ public interface QuestionsDAO {
     List<QuestionDetailsDTO> getQuestionById(int id);
     int addNewQuestion(NewQuestionDTO question);
     Boolean deleteQuestion(int id);
+
+    int addNewAnswer(int questionId, NewAnswerDTO answer);
 }
