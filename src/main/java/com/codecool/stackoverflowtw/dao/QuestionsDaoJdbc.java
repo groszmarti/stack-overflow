@@ -13,6 +13,7 @@ import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
 import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -74,9 +75,9 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public List<QuestionDetailsDTO> getQuestionById(int questionId) {
-        String query = "SELECT question.id, question.title, question.description, question.date, answer.answer as answer, answer.date as answer_date FROM question\n" +
+        String query = "SELECT question.*, answer.answer as answer, answer.date as answer_date FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
-                "WHERE question.id =" + questionId;
+                "WHERE question.id = ?";
         try (Connection connection = database.getConnection()) {
 
             PreparedStatement statement = connection.prepareStatement(query);
@@ -90,7 +91,14 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                 String description = resultSet.getString("description");
                 LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
                 String answer = resultSet.getString("answer");
-                LocalDateTime answerDate = resultSet.getTimestamp("answer_date").toLocalDateTime();
+
+                LocalDateTime answerDate = null;
+
+                Timestamp nonFormattedAnswerDate = resultSet.getTimestamp("answer_date");
+                if (nonFormattedAnswerDate != null) {
+                    answerDate = nonFormattedAnswerDate.toLocalDateTime();
+                }
+
                 QuestionDetailsDTO question = new QuestionDetailsDTO(id, title, description, dateAndTime, answer, answerDate);
                 questions.add(question);
             }
