@@ -10,11 +10,26 @@ const deleteQuestion = (id, navigate) => {
   });
 }
 
+const addAnswer = (id, newAnswer, navigate) => {
+  const pushAnswer = {
+    answer: newAnswer
+  }
+
+  fetch(`/api/questions/${id}`, {
+  method: "POST",
+  headers: {
+    "Content-Type": "application/json",
+  },
+  body: JSON.stringify(pushAnswer),
+  }).then(res => res.json()).then(() => navigate(`/question/${id}`))
+}
+
 
 const ViewQuestion = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [question, setQuestion] = useState(null);
+  const [newAnswer, setNewAnswer] = useState('');
 
   let title, description;
   const answers = [];
@@ -62,8 +77,8 @@ const ViewQuestion = () => {
       
     }
   </div>
-  <input></input><br/>
-  <button>Add Comment</button>
+  <input value={newAnswer} onChange={(e) => setNewAnswer(e.target.value)}></input><br/>
+  <button onClick={() => addAnswer(id, newAnswer, navigate)}>Add Comment</button>
   </>
 }
 

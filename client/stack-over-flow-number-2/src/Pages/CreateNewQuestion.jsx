@@ -16,7 +16,7 @@ const addQuestion = (title, description, navigate) => {
 }
 
 const postQuestion = (newQuestion) => {
-  console.log(newQuestion);
+  
   return fetch("/api/questions/", {
     method: "POST",
     headers: {
