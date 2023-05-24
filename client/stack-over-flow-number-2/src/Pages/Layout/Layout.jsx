@@ -4,19 +4,19 @@ import "./Layout.css";
 
 const Layout = () => (
   <div className="Layout">
-    <nav>
+    <nav className="header">
       <ul>
         <li>
           <Link to="/" className="grow">Stack Overflow</Link>
         </li>
         <li>
           <Link to="/createQuestion">
-            <button type="button">New Question</button>
+            <button className="button" type="button">New Question</button>
           </Link>
         </li>
         <li>
           <Link to="/login">
-            <button type="button">Login</button>
+            <button className="button" type="button">Login</button>
           </Link>
         </li>
       </ul>

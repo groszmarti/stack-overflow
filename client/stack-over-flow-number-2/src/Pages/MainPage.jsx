@@ -13,30 +13,33 @@ const MainPage = () => {
   }, []);
 
   if(allQuestions.length === 0){
-    return <div>Loading...</div>
+    return <div className='loading'>Loading...</div>
   }
 
 
   return <>
   {allQuestions.map(question => {
     let questionDate = question.created.replace("T", " ") 
-    return <ul key={question.id}>
-      <li>
+    return <>
+    <div className='questions'></div>
+    <ul className='list' key={question.id}>
+      <li className='list_item'>
         <div className='question_card'>
         <div className='question_title'>
         < Link to={`/question/${question.id}`}>
         {question.title}
         </Link>
         </div>
-        <div>
+        <div className='counter'>
           Number of Answer {question.answerCount}
         </div>
-        <div className='question_date'>
+        <div className='date'>
         {questionDate}
         </div>
         </div>
       </li>
     </ul>
+    </>
   })}
   </>
 };
