@@ -44,7 +44,9 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public List<QuestionDTO> getAllQuestions() {
-        String query = "SELECT * FROM question\n" +
+        String query = "SELECT *, COUNT(answer.id) as answer_count FROM question\n" +
+                "JOIN answer ON answer.question_id = question.id\n" +
+                "GROUP BY question" +
                 "ORDER BY question.date DESC";
         try (Connection connection = database.getConnection()) {
             Statement statement = connection.createStatement();
