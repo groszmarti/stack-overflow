@@ -133,7 +133,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public Boolean deleteQuestion(int questionId) {
-        String query = "SELECT * FROM question WHERE id = ?";
+        String query = "DELETE FROM question WHERE id = ?";
 
         try (Connection connection = database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
