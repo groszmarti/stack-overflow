@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react'
+import { Link } from "react-router-dom";
 
 const MainPage = () => {
 
@@ -16,9 +17,18 @@ const MainPage = () => {
   }
 
   return <>
-  {allQuestion.map(question => {console.log(question)
-    return <div>{`${question.title} - ${question.created}`}</div>
-  } )}
+  
+  {allQuestion.map(question => (
+    <ul key={question.id}>
+      <li>
+        < Link to={`/question/${question.id}`}>
+        {question.title}
+        </Link>
+        {question.created}
+      </li>
+    </ul>
+  ))}
+  
   </>
 };
 
