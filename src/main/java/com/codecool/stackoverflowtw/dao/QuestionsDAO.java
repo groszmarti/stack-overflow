@@ -19,4 +19,6 @@ public interface QuestionsDAO {
     Boolean deleteQuestion(int id);
 
     int addNewAnswer(int questionId, NewAnswerDTO answer);
+
+    Boolean deleteAnswer(int answerId);
 }

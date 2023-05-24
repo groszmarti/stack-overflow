@@ -8,7 +8,6 @@ import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @RestController
@@ -26,9 +25,9 @@ public class QuestionController {
         return questionService.getAllQuestions();
     }
 
-    @GetMapping("/{id}")
-    public List<QuestionDetailsDTO> getQuestionById(@PathVariable int id) {
-        return questionService.getQuestionById(id);
+    @GetMapping("/{questionId}")
+    public List<QuestionDetailsDTO> getQuestionById(@PathVariable int questionId) {
+        return questionService.getQuestionById(questionId);
     }
 
     @PostMapping("/")
@@ -36,15 +35,22 @@ public class QuestionController {
         questionService.addNewQuestion(question);
         return 0;
     }
-    @PostMapping("/{id}")
-    public int addAnswerToQuestion(@PathVariable int id, @RequestBody NewAnswerDTO answer) {
-        questionService.addNewAnswer(id, answer);
+
+    @PostMapping("/{questionId}")
+    public int addAnswerToQuestion(@PathVariable int questionId, @RequestBody NewAnswerDTO answer) {
+        questionService.addNewAnswer(questionId, answer);
         return 0;
     }
 
-    @DeleteMapping("/{id}")
-    public boolean deleteQuestionById(@PathVariable int id) {
-        questionService.deleteQuestionById(id);
+    @DeleteMapping("/{questionId}/{answerId}")
+    public boolean deleteAnswer(@PathVariable int answerId) {
+        questionService.deleteAnswer(answerId);
+        return true;
+    }
+
+    @DeleteMapping("/{questionId}")
+    public boolean deleteQuestionById(@PathVariable int questionId) {
+        questionService.deleteQuestionById(questionId);
         return true;
     }
 }

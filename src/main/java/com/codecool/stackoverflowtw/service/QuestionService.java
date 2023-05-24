@@ -47,4 +47,8 @@ public class QuestionService {
         questionsDAO.addNewAnswer(questionId, answer);
         return 1;
     }
+
+    public boolean deleteAnswer(int answerId) {
+        return questionsDAO.deleteAnswer(answerId);
+    }
 }

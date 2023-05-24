@@ -75,7 +75,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public List<QuestionDetailsDTO> getQuestionById(int questionId) {
-        String query = "SELECT question.*, answer.answer as answer, answer.date as answer_date FROM question\n" +
+        String query = "SELECT question.*, answer.answer as answer, answer.date as answer_date, answer.id as answer_id FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
                 "WHERE question.id = ?";
         try (Connection connection = database.getConnection()) {
@@ -91,6 +91,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                 String description = resultSet.getString("description");
                 LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
                 String answer = resultSet.getString("answer");
+                int answerId = resultSet.getInt("answer_id");
 
                 LocalDateTime answerDate = null;
 
@@ -99,7 +100,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                     answerDate = nonFormattedAnswerDate.toLocalDateTime();
                 }
 
-                QuestionDetailsDTO question = new QuestionDetailsDTO(id, title, description, dateAndTime, answer, answerDate);
+                QuestionDetailsDTO question = new QuestionDetailsDTO(id, title, description, dateAndTime, answerId, answer, answerDate);
                 questions.add(question);
             }
 
@@ -165,5 +166,19 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         statement.setInt(1, questionId);
         statement.setString(2, answer);
         statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
+    }
+
+    @Override
+    public Boolean deleteAnswer(int answerId) {
+        String query = "DELETE FROM answer WHERE id = ?";
+
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, answerId);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
