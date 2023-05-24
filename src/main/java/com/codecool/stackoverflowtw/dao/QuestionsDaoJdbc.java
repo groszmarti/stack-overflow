@@ -107,7 +107,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         try {
             Connection connection = database.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
-            prepare(question.title(),statement);
+            prepare(question.title(), question.description(), statement);
             statement.executeUpdate();
         }
         catch (SQLException e) {
@@ -116,9 +116,9 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         return 1;
     }
 
-    private void prepare(String title, PreparedStatement statement) throws SQLException {
+    private void prepare(String title, String description, PreparedStatement statement) throws SQLException {
         statement.setString(1, title);
-        statement.setString(2, null);
+        statement.setString(2, description);
         statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
     }
 
