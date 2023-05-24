@@ -20,7 +20,6 @@ const MainPage = () => {
   return <>
   {allQuestions.map(question => {
     let questionDate = question.created.replace("T", " ") 
-    console.log(question)
     return <ul key={question.id}>
       <li>
         <div className='question_card'>

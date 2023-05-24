@@ -16,6 +16,8 @@ const ViewQuestion = () => {
   const navigate = useNavigate();
   const [question, setQuestion] = useState(null);
 
+  let title, description;
+
   useEffect(() => {
     fetch(`/api/questions/${id}`)
       .then(res => res.json())
@@ -26,10 +28,18 @@ const ViewQuestion = () => {
     return <div>Loading...</div>
   }
 
+  question.map(element => {
+    title = element.title;
+    description = element.description;
+  })
+  
+
   return <>
   <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
-  <div>{question.title}</div>
-  <div>{question.description}</div>
+  <div className="question_card">
+    <div>{title}</div>
+    <div>{description}</div>
+  </div>
   <input></input><br/>
   <button>Add Comment</button>
   </>
