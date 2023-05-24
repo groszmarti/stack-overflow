@@ -20,9 +20,8 @@ const MainPage = () => {
   return <>
   {allQuestions.map(question => {
     let questionDate = question.created.replace("T", " ") 
-    return <>
-    <div className='questions'>
-    <ul className='list' key={question.id}>
+    return <div className='questions' key={question.id}>
+    <ul className='list'>
       <li className='list_item'>
         <div className='question_card'>
           <div className='question_title'>
@@ -40,7 +39,6 @@ const MainPage = () => {
       </li>
     </ul>
     </div>
-    </>
   })}
   </>
 };
