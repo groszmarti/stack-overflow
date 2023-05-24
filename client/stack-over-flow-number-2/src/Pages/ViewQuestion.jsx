@@ -33,20 +33,33 @@ const deleteAnswer = (id, answerId) => {
   });
 }
 
+const editQuestion = (id, setIsEdited) => {
+  setIsEdited(true);
+}
 
 const ViewQuestion = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [question, setQuestion] = useState(null);
   const [newAnswer, setNewAnswer] = useState('');
+  const [questionTitle, setQuestionTitle] = useState('');
+  const [questionDescription, setQuestionDescription] = useState('');
 
-  let title, description;
+  const [isEdited, setIsEdited] = useState(false);
+
   const answers = [];
 
   useEffect(() => {
     fetch(`/api/questions/${id}`)
       .then(res => res.json())
-      .then(data => setQuestion(data))
+      .then(data => {
+        data.map(question => {
+          setQuestionTitle(question.title);
+          setQuestionDescription(question.description);
+        })
+
+        setQuestion(data)
+      })
   }, [id])
 
   if(question === null){
@@ -54,9 +67,6 @@ const ViewQuestion = () => {
   }
 
   question.map(element => {
-    title = element.title;
-    description = element.description;
-
     if(element.answer !== null){
       answers.push({
         answerId : element.answerId,
@@ -67,10 +77,14 @@ const ViewQuestion = () => {
   })
 
   return <>
+  <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button>
   <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
   <div className="question_card">
-    <div>{title}</div>
-    <div>{description}</div>
+    {!isEdited ? <><div>{questionTitle}</div>
+    <div>{questionDescription}</div></> : 
+    <><input></input><br/>
+    <input></input><br/>
+    <button>Save</button></>}
   </div>
   <div>
     {answers.length === 0 ? <div>No Answers</div> :
