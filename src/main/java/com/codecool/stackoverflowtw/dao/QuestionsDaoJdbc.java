@@ -167,4 +167,18 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         statement.setString(2, answer);
         statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
     }
+
+    @Override
+    public Boolean deleteAnswer(int answerId) {
+        String query = "DELETE FROM answer WHERE id = ?";
+
+        try (Connection connection = database.getConnection();
+             PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, answerId);
+            statement.executeUpdate();
+            return true;
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }

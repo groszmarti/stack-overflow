@@ -35,10 +35,17 @@ public class QuestionController {
         questionService.addNewQuestion(question);
         return 0;
     }
+
     @PostMapping("/{questionId}")
     public int addAnswerToQuestion(@PathVariable int questionId, @RequestBody NewAnswerDTO answer) {
         questionService.addNewAnswer(questionId, answer);
         return 0;
+    }
+
+    @DeleteMapping("/{questionId}/{answerId}")
+    public boolean deleteAnswer(@PathVariable int answerId) {
+        questionService.deleteAnswer(answerId);
+        return true;
     }
 
     @DeleteMapping("/{questionId}")
