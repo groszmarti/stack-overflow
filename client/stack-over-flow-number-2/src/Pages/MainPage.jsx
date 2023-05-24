@@ -21,24 +21,25 @@ const MainPage = () => {
   {allQuestions.map(question => {
     let questionDate = question.created.replace("T", " ") 
     return <>
-    <div className='questions'></div>
+    <div className='questions'>
     <ul className='list' key={question.id}>
       <li className='list_item'>
         <div className='question_card'>
-        <div className='question_title'>
-        < Link to={`/question/${question.id}`}>
-        {question.title}
-        </Link>
-        </div>
-        <div className='counter'>
-          Number of Answer {question.answerCount}
-        </div>
-        <div className='date'>
-        {questionDate}
-        </div>
+          <div className='question_title'>
+          < Link to={`/question/${question.id}`}>
+          {question.title}
+          </Link>
+          </div>
+          <div className='counter'>
+            Number of Answer {question.answerCount}
+          </div>
+          <div className='date'>
+          {questionDate}
+          </div>
         </div>
       </li>
     </ul>
+    </div>
     </>
   })}
   </>
