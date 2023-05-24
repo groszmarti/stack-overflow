@@ -45,13 +45,16 @@ const ViewQuestion = () => {
   }
 
   question.map(element => {
-    console.log(element)
     title = element.title;
     description = element.description;
-    answers.push({
-      answer: element.answer,
-      date: element.answerDate
-    });
+
+    if(element.answer !== null){
+      answers.push({
+        answer: element.answer,
+        date: element.answerDate
+      });
+    }
+    
     
   })
 
@@ -62,7 +65,7 @@ const ViewQuestion = () => {
     <div>{description}</div>
   </div>
   <div>
-    {answers === null ? <div>No Answers</div> :
+    {answers.length === 0 ? <div>No Answers</div> :
       
       answers.map((answer, index) => {
         let answerDate = answer.date.replace("T", " ");
