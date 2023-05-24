@@ -113,7 +113,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        return 0;
+        return 1;
     }
 
     private void prepare(String title, PreparedStatement statement) throws SQLException {
