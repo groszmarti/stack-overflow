@@ -71,7 +71,9 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public QuestionDTO getQuestionById(int questionId) {
-        String query = "SELECT * FROM question WHERE id =" + questionId;
+        String query = "SELECT *, answer.answer as answer, answer.date as answer_date FROM question\n" +
+                "JOIN answer ON answer.question_id = question.id\n" +
+                "WHERE id =" + questionId;
         try (Connection connection = database.getConnection()) {
 
             Statement statement = connection.createStatement();
