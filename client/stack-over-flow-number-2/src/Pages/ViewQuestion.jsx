@@ -24,6 +24,15 @@ const addAnswer = (id, newAnswer, navigate) => {
   }).then(res => res.json()).then(() => window.location.reload())
 }
 
+const deleteAnswer = (id, answerId) => {
+  fetch(`/api/questions/${id}/${answerId}`, {
+    method: 'DELETE',
+  })
+  .then(() => {
+    window.location.reload();
+  });
+}
+
 
 const ViewQuestion = () => {
   const { id } = useParams();
@@ -50,6 +59,7 @@ const ViewQuestion = () => {
 
     if(element.answer !== null){
       answers.push({
+        answerId : element.answerId,
         answer: element.answer,
         date: element.answerDate
       });
@@ -65,12 +75,13 @@ const ViewQuestion = () => {
   <div>
     {answers.length === 0 ? <div>No Answers</div> :
       
-      answers.map((answer, index) => {
+      answers.map(answer=> {
         let answerDate = answer.date.replace("T", " ");
 
-        return <div key={index}>
+        return <div key={answer.answerId}>
         <div>{answer.answer}</div>
         <div>{answerDate}</div>
+        <button onClick={() => {deleteAnswer(id, answer.answerId)}}>Delete Answer</button>
         </div>
       }
         
