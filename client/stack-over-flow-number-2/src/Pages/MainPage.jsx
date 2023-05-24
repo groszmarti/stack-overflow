@@ -21,10 +21,16 @@ const MainPage = () => {
   {allQuestions.map(question => (
     <ul key={question.id}>
       <li>
+        <div className='question_card'>
+        <div className='question_title'>
         < Link to={`/question/${question.id}`}>
         {question.title}
         </Link>
+        </div>
+        <div className='question_date'>
         {question.created}
+        </div>
+        </div>
       </li>
     </ul>
   ))}

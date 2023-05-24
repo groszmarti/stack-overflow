@@ -79,8 +79,9 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                 "WHERE question.id =" + questionId;
         try (Connection connection = database.getConnection()) {
 
-            Statement statement = connection.createStatement();
-            ResultSet resultSet = statement.executeQuery(query);
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setInt(1, questionId);
+            ResultSet resultSet = statement.executeQuery();
 
             List<QuestionDetailsDTO> questions = new ArrayList<>();
             while (resultSet.next()) {
