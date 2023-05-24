@@ -24,7 +24,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     public QuestionsDaoJdbc(Database database) {
         this.database = database;
-        this.tables = Map.of("question", TableStatements.QUESTION);
+        this.tables = Map.of(
+                "question", TableStatements.QUESTION,
+                "answer", TableStatements.ANSWER
+        );
     }
 
     @Override
