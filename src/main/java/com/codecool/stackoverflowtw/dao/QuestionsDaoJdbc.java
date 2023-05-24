@@ -125,9 +125,11 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public Boolean deleteQuestion(int questionId) {
-        String query = "DELETE FROM question WHERE id =" + questionId;
+        String query = "SELECT * FROM question WHERE id = ?";
+
         try (Connection connection = database.getConnection();
              PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(1, questionId);
             statement.executeUpdate();
             return true;
         } catch (SQLException e) {
