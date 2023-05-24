@@ -18,8 +18,9 @@ const MainPage = () => {
 
 
   return <>
-  {allQuestions.map(question => (
-    <ul key={question.id}>
+  {allQuestions.map(question => {
+    let questionDate = question.created.replace("T", " ") 
+    return <ul key={question.id}>
       <li>
         <div className='question_card'>
         <div className='question_title'>
@@ -28,12 +29,12 @@ const MainPage = () => {
         </Link>
         </div>
         <div className='question_date'>
-        {question.created}
+        {questionDate}
         </div>
         </div>
       </li>
     </ul>
-  ))}
+  })}
   </>
 };
 
