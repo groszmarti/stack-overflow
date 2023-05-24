@@ -6,7 +6,8 @@ import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
-import com.codecool.stackoverflowtw.dao.model.Question;
+
+import com.codecool.stackoverflowtw.controller.dto.QuestionDetailsDTO;
 import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
 import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
@@ -45,8 +46,8 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     @Override
     public List<QuestionDTO> getAllQuestions() {
         String query = "SELECT question.id, question.title, question.description, question.date, COUNT(answer.id) as answer_count FROM question\n" +
-                "JOIN answer ON answer.question_id = question.id\n" +
-                "GROUP BY question" +
+                "LEFT JOIN answer ON answer.question_id = question.id OR answer.question_id = null\n" +
+                "GROUP BY question.id" +
                 "ORDER BY question.date DESC";
         try (Connection connection = database.getConnection()) {
             Statement statement = connection.createStatement();
@@ -57,12 +58,14 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
                 LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
-                QuestionDTO question = new QuestionDTO(id, title, description, dateAndTime);
+                int answerCount = resultSet.getInt("answer_count");
+                QuestionDTO question = new QuestionDTO(id, title, description, dateAndTime, answerCount);
                 questions.add(question);
             }
             for (QuestionDTO question : questions) {
                 System.out.println(question);
             }
+            System.out.println(questions);
             return questions;
         } catch (SQLException e) {
             throw new RuntimeException(e);
@@ -70,26 +73,28 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     }
 
     @Override
-    public QuestionDTO getQuestionById(int questionId) {
+    public List<QuestionDetailsDTO> getQuestionById(int questionId) {
         String query = "SELECT question.id, question.title, question.description, question.date, answer.answer as answer, answer.date as answer_date FROM question\n" +
-                "JOIN answer ON answer.question_id = question.id\n" +
+                "LEFT JOIN answer ON answer.question_id = question.id\n" +
                 "WHERE id =" + questionId;
         try (Connection connection = database.getConnection()) {
 
             Statement statement = connection.createStatement();
             ResultSet resultSet = statement.executeQuery(query);
 
-            QuestionDTO question = null;
-
+            List<QuestionDetailsDTO> questions = new ArrayList<>();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
                 LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
-                question = new QuestionDTO(id, title, description, dateAndTime);
+                String answer = resultSet.getString("answer");
+                LocalDateTime answerDate = resultSet.getTimestamp("answer_date").toLocalDateTime();
+                QuestionDetailsDTO question = new QuestionDetailsDTO(id, title, description, dateAndTime, answer, answerDate);
+                questions.add(question);
             }
 
-            return question;
+            return questions;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
