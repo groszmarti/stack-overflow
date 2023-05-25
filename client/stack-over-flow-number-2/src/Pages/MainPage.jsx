@@ -19,7 +19,7 @@ const MainPage = () => {
 
   return <>
   {allQuestions.map(question => {
-    let questionDate = question.createdDate + question.createdTime;
+    let questionDate = question.createdDate + " " + question.createdTime;
 
     return <div className='questions' key={question.id}>
     <ul className='list'>

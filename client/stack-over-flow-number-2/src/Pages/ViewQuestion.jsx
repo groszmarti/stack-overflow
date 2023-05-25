@@ -61,6 +61,20 @@ const saveQuestion = (id, title, description) => {
 
 }
 
+const fetchQuestion = (id, setQuestionTitle, setQuestionDescription, setQuestionDate, setQuestion) => {
+  fetch(`/api/questions/${id}`)
+      .then(res => res.json())
+      .then(data => {
+      console.log(data)
+    })
+}
+
+const fetchAnswer = (id, setQuestionAnswers) => {
+  fetch(`/api/${id}/answers`)
+    .then(res => res.json())
+    .then(data => console.log(data))
+}
+
 const ViewQuestion = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -69,24 +83,15 @@ const ViewQuestion = () => {
   const [questionTitle, setQuestionTitle] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
   const [questionDate, setQuestionDate] = useState('');
+  const [questionAnswers, setQuestionAnswers] = useState(null);
 
   const [isEdited, setIsEdited] = useState(false);
 
   const answers = [];
 
   useEffect(() => {
-    fetch(`/api/questions/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        data.map(question => {
-          let created = question.createdDate + question.createdTime;
-          setQuestionTitle(question.title);
-          setQuestionDescription(question.description);
-          setQuestionDate(created);
-        })
-
-        setQuestion(data)
-      })
+    fetchQuestion(id, setQuestionTitle, setQuestionDescription, setQuestionDate, setQuestion);
+    /* fetchAnswer(id, setQuestionAnswers); */
   }, [id])
 
   if(question === null){
@@ -95,7 +100,7 @@ const ViewQuestion = () => {
 
   question.map(element => {
     if(element.answer !== null){
-      let answerDate = element.answerDate + element.answerTime;
+      let answerDate = element.answerDate + " " + element.answerTime;
 
       answers.push({
         answerId : element.answerId,
