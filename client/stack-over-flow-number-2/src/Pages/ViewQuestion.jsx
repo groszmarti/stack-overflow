@@ -33,20 +33,57 @@ const deleteAnswer = (id, answerId) => {
   });
 }
 
+const editQuestion = (id, setIsEdited) => {
+  setIsEdited(true);
+}
+
+const saveQuestion = (id, title, description) => {
+  let warningMessage = "please fill all field"
+
+  if(title.length === 0 || description.length === 0){
+    return alert(warningMessage);
+  }
+
+  const questionUpdate = {
+    title: title,
+    description: description
+  }
+
+  fetch(`/api/questions/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(questionUpdate),
+  })
+  .then((res) => res.json())
+  .then(() => {window.location.reload()})
+
+}
 
 const ViewQuestion = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [question, setQuestion] = useState(null);
   const [newAnswer, setNewAnswer] = useState('');
+  const [questionTitle, setQuestionTitle] = useState('');
+  const [questionDescription, setQuestionDescription] = useState('');
 
-  let title, description, date;
+  const [isEdited, setIsEdited] = useState(false);
+
   const answers = [];
 
   useEffect(() => {
     fetch(`/api/questions/${id}`)
       .then(res => res.json())
-      .then(data => setQuestion(data))
+      .then(data => {
+        data.map(question => {
+          setQuestionTitle(question.title);
+          setQuestionDescription(question.description);
+        })
+
+        setQuestion(data)
+      })
   }, [id])
 
   if(question === null){
@@ -54,10 +91,6 @@ const ViewQuestion = () => {
   }
 
   question.map(element => {
-    title = element.title;
-    description = element.description;
-    date = element.date;
-
     if(element.answer !== null){
       answers.push({
         answerId : element.answerId,
@@ -68,11 +101,17 @@ const ViewQuestion = () => {
   })
 
   return <>
-  <div className='question_card'>
-    <div className='title'>{title}</div>
-    <div className='description'>{description}</div>
-    <div className='date'>{date}</div>
-  <button className='buttons' onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
+    
+  <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button>
+  
+  <div className="question_card">
+    {!isEdited ? <><div className='title'>{questionTitle}</div>
+    <div className='description'>{questionDescription}</div></> : 
+    <><input value={questionTitle} onChange={(e) => {setQuestionTitle(e.target.value)}}></input><br/>
+    <input value={questionDescription} onChange={(e) => {setQuestionDescription(e.target.value)}}></input><br/>
+    <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
+    <button onClick={() => {saveQuestion(id, questionTitle, questionDescription)}}>Save</button></>}
+
   </div>
 
   <div className='answers'>
