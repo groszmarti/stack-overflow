@@ -26,7 +26,7 @@ public class QuestionService {
         return  questionsDAO.getAllQuestions();
     }
 
-    public List<QuestionDetailsDTO> getQuestionById(int id) {
+    public QuestionDTO getQuestionById(int id) {
         // TODO
         return questionsDAO.getQuestionById(id);
     }

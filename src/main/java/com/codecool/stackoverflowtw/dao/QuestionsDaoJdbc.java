@@ -74,40 +74,31 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     }
 
     @Override
-    public List<QuestionDetailsDTO> getQuestionById(int questionId) {
-        String query = "SELECT question.*, answer.answer as answer, answer.date as answer_date, answer.id as answer_id FROM question\n" +
+    public QuestionDTO getQuestionById(int questionId) {
+        String query = "SELECT question.*, COUNT(answer.id) as answer_count FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
-                "WHERE question.id = ?";
+                "WHERE question.id = ?" +
+                "GROUP BY question.id";
         try (Connection connection = database.getConnection()) {
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, questionId);
             ResultSet resultSet = statement.executeQuery();
 
-            List<QuestionDetailsDTO> questions = new ArrayList<>();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
                 LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
-                String answer = resultSet.getString("answer");
-                int answerId = resultSet.getInt("answer_id");
+                int answerCount = resultSet.getInt("answer_count");
 
-                LocalDateTime answerDate = null;
-
-                Timestamp nonFormattedAnswerDate = resultSet.getTimestamp("answer_date");
-                if (nonFormattedAnswerDate != null) {
-                    answerDate = nonFormattedAnswerDate.toLocalDateTime();
-                }
-
-                QuestionDetailsDTO question = new QuestionDetailsDTO(id, title, description, dateAndTime, answerId, answer, answerDate);
-                questions.add(question);
+                QuestionDTO question = new QuestionDTO(id, title, description, dateAndTime, answerCount);
+                return question;
             }
-
-            return questions;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     @Override

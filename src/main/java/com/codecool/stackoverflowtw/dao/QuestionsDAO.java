@@ -14,7 +14,7 @@ public interface QuestionsDAO {
 
     void sayHi();
     List<QuestionDTO> getAllQuestions();
-    List<QuestionDetailsDTO> getQuestionById(int id);
+    QuestionDTO getQuestionById(int id);
     int addNewQuestion(NewQuestionDTO question);
     Boolean deleteQuestion(int id);
 
