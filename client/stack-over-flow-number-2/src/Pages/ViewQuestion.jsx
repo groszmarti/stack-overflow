@@ -95,10 +95,12 @@ const ViewQuestion = () => {
 
   question.map(element => {
     if(element.answer !== null){
+      let answerDate = element.answerDate + element.answerTime;
+
       answers.push({
         answerId : element.answerId,
         answer: element.answer,
-        date: element.answerDate
+        date: answerDate
       });
     }
   })
