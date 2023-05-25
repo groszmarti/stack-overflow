@@ -68,6 +68,7 @@ const ViewQuestion = () => {
   const [newAnswer, setNewAnswer] = useState('');
   const [questionTitle, setQuestionTitle] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
+  const [questionDate, setQuestionDate] = useState('');
 
   const [isEdited, setIsEdited] = useState(false);
 
@@ -80,6 +81,7 @@ const ViewQuestion = () => {
         data.map(question => {
           setQuestionTitle(question.title);
           setQuestionDescription(question.description);
+          setQuestionDate(question.created);
         })
 
         setQuestion(data)
@@ -101,16 +103,17 @@ const ViewQuestion = () => {
   })
 
   return <>
-    
-  <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button>
   
   <div className="question_card">
     {!isEdited ? <><div className='title'>{questionTitle}</div>
-    <div className='description'>{questionDescription}</div></> : 
+    <div className='description'>{questionDescription}</div>
+    <div className='date'>{questionDate.replace("T", " ")}</div>
+    <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button></> : 
     <><input value={questionTitle} onChange={(e) => {setQuestionTitle(e.target.value)}}></input><br/>
     <input value={questionDescription} onChange={(e) => {setQuestionDescription(e.target.value)}}></input><br/>
-    <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
-    <button onClick={() => {saveQuestion(id, questionTitle, questionDescription)}}>Save</button></>}
+    <button onClick={() => {saveQuestion(id, questionTitle, questionDescription)}}>Save</button>
+    <button onClick={() => {deleteQuestion(id, navigate)}}>Delete</button>
+    </>}
 
   </div>
 
