@@ -37,6 +37,30 @@ const editQuestion = (id, setIsEdited) => {
   setIsEdited(true);
 }
 
+const saveQuestion = (id, title, description) => {
+  let warningMessage = "please fill all field"
+
+  if(title.length === 0 || description.length === 0){
+    return alert(warningMessage);
+  }
+
+  const questionUpdate = {
+    title: title,
+    description: description
+  }
+
+  fetch(`/api/questions/${id}`, {
+    method: "PATCH",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(questionUpdate),
+  })
+  .then((res) => res.json())
+  .then(() => {window.location.reload()})
+
+}
+
 const ViewQuestion = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -78,13 +102,14 @@ const ViewQuestion = () => {
 
   return <>
   <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button>
-  <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
+  
   <div className="question_card">
     {!isEdited ? <><div>{questionTitle}</div>
     <div>{questionDescription}</div></> : 
-    <><input></input><br/>
-    <input></input><br/>
-    <button>Save</button></>}
+    <><input value={questionTitle} onChange={(e) => {setQuestionTitle(e.target.value)}}></input><br/>
+    <input value={questionDescription} onChange={(e) => {setQuestionDescription(e.target.value)}}></input><br/>
+    <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
+    <button onClick={() => {saveQuestion(id, questionTitle, questionDescription)}}>Save</button></>}
   </div>
   <div>
     {answers.length === 0 ? <div>No Answers</div> :
