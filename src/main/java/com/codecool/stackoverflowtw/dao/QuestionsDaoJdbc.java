@@ -183,8 +183,8 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     }
 
     @Override
-    public void editQuestion(int questionId, QuestionDTO question) {
-        String query = "UPDATE question" +
+    public void editQuestion(int questionId, NewQuestionDTO question) {
+        String query = "UPDATE question\n" +
                 "SET title = ?, description = ?\n" +
                 "WHERE question.id = ?";
         try (Connection connection = database.getConnection()) {

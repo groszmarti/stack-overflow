@@ -22,5 +22,5 @@ public interface QuestionsDAO {
 
     Boolean deleteAnswer(int answerId);
 
-    void editQuestion(int questionId, QuestionDTO question);
+    void editQuestion(int questionId, NewQuestionDTO question);
 }
