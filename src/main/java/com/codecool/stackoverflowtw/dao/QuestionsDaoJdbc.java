@@ -146,41 +146,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         }
     }
 
-    @Override
-    public int addNewAnswer(int questionId, NewAnswerDTO answer) {
-        String query = "INSERT INTO answer (question_id, answer, date)" +
-                "VALUES (?, ?, ?)";
-        try {
-            Connection connection = database.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-            prepareAnswer(questionId, answer.answer(), statement);
-            statement.executeUpdate();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return 1;
-    }
 
-    private void prepareAnswer(int questionId, String answer, PreparedStatement statement) throws SQLException {
-        statement.setInt(1, questionId);
-        statement.setString(2, answer);
-        statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
-    }
-
-    @Override
-    public Boolean deleteAnswer(int answerId) {
-        String query = "DELETE FROM answer WHERE id = ?";
-
-        try (Connection connection = database.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, answerId);
-            statement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void editQuestion(int questionId, NewQuestionDTO question) {

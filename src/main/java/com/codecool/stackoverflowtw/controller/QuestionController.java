@@ -36,23 +36,12 @@ public class QuestionController {
         return 0;
     }
 
-    @PostMapping("/{questionId}")
-    public int addAnswerToQuestion(@PathVariable int questionId, @RequestBody NewAnswerDTO answer) {
-        questionService.addNewAnswer(questionId, answer);
-        return 0;
-    }
-
     @PatchMapping("/{questionId}")
     public int editQuestion(@PathVariable int questionId, @RequestBody NewQuestionDTO question) {
         questionService.editQuestion(questionId, question);
         return 1;
     }
 
-    @DeleteMapping("/{questionId}/{answerId}")
-    public boolean deleteAnswer(@PathVariable int answerId) {
-        questionService.deleteAnswer(answerId);
-        return true;
-    }
 
     @DeleteMapping("/{questionId}")
     public boolean deleteQuestionById(@PathVariable int questionId) {

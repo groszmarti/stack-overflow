@@ -43,15 +43,6 @@ public class QuestionService {
     }
 
 
-    public int addNewAnswer(int questionId, NewAnswerDTO answer) {
-        questionsDAO.addNewAnswer(questionId, answer);
-        return 1;
-    }
-
-    public boolean deleteAnswer(int answerId) {
-        return questionsDAO.deleteAnswer(answerId);
-    }
-
     public int editQuestion(int questionId, NewQuestionDTO question) {
         questionsDAO.editQuestion(questionId, question);
         return 1;
