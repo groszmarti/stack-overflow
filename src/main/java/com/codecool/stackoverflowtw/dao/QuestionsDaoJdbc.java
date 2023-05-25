@@ -181,4 +181,20 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public void editQuestion(int questionId, QuestionDTO question) {
+        String query = "UPDATE question" +
+                "SET title = ?, description = ?\n" +
+                "WHERE question.id = ?";
+        try (Connection connection = database.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, question.title());
+            statement.setString(2, question.description());
+            statement.setInt(3, questionId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+    }
 }
