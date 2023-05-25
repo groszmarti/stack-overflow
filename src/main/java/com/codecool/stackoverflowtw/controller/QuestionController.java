@@ -43,7 +43,7 @@ public class QuestionController {
     }
 
     @PatchMapping("/{questionId}")
-    public int editQuestion(@PathVariable int questionId, @RequestBody QuestionDTO question) {
+    public int editQuestion(@PathVariable int questionId, @RequestBody NewQuestionDTO question) {
         questionService.editQuestion(questionId, question);
         return 1;
     }

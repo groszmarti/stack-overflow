@@ -52,7 +52,7 @@ public class QuestionService {
         return questionsDAO.deleteAnswer(answerId);
     }
 
-    public int editQuestion(int questionId, QuestionDTO question) {
+    public int editQuestion(int questionId, NewQuestionDTO question) {
         questionsDAO.editQuestion(questionId, question);
         return 1;
     }
