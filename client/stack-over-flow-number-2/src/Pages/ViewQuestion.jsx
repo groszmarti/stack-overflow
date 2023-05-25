@@ -110,7 +110,10 @@ const ViewQuestion = () => {
     {!isEdited ? <><div className='title'>{questionTitle}</div>
     <div className='description'>{questionDescription}</div>
     <div className='date'>{questionDate}</div>
-    <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button></> : 
+    <div className='question_button_div'>
+      <button id='question_button' onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button>
+    </div>
+        </> :
     <><input value={questionTitle} onChange={(e) => {setQuestionTitle(e.target.value)}}></input><br/>
     <input value={questionDescription} onChange={(e) => {setQuestionDescription(e.target.value)}}></input><br/>
     <button onClick={() => {saveQuestion(id, questionTitle, questionDescription)}}>Save</button>

@@ -17,6 +17,7 @@
 
 .Layout nav button {
   padding: 0.7rem 1.7rem;
+  padding-left: 2em;
   font-weight: bold;
 }
 
@@ -26,6 +27,15 @@
 
 .grow {
   color: rgb(50, 11, 52);
+}
+
+.site_title {
+  font-size: x-large;
+  margin-left: 20px;
+}
+
+.link_button {
+  margin-left: 50px;
 }
 
 .new_card {
@@ -38,7 +48,7 @@
 .input {
   width: 50%;
   border-radius: 12px;
-  font-size: 5em;
+  font-size: 4em;
   align-items: center;
   margin-top: 20px;
   margin-bottom: 20px;
@@ -47,15 +57,15 @@
 
 .input_title {
   width: 100%;
-  font-size: 5em;
+  font-size: 4em;
   margin-top: 20px;
   margin-bottom: 20px;
   text-align: center;
 }
 
 .buttons {
-  width: 20%;
-  font-size: 2em;
+  width: auto;
+  font-size: 3em;
   margin-top: 40px;
   border-radius: 12px;
   align-items: center;
@@ -67,7 +77,7 @@
 }
 
 .question_title {
-  font-size: 5em;
+  font-size: 3em;
 }
 
 .list_item {
@@ -81,7 +91,34 @@
   align-items: center;
 }
 
-.counter, .date {
+.description, .title {
+  text-align: center;
+  font-size: 2em;
+  padding: 20px;
+}
+
+.date, .counter {
+  text-align: center;
+  font-size: 1em;
+  padding: 20px;
+}
+
+.question_button_div {
+  text-align: center;
+  padding-bottom: 40px;
+}
+
+#question_button {
+  font-size: 2em;
+  border-radius: 12px;
+}
+
+.answers {
+  justify-content: center;
+}
+
+.list {
+  font-size: 1.5em;
   text-align: center;
 }
 
