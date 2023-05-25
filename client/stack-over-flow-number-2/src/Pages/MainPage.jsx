@@ -19,7 +19,8 @@ const MainPage = () => {
 
   return <>
   {allQuestions.map(question => {
-    let questionDate = question.created.replace("T", " ") 
+    let questionDate = question.createdDate + question.createdTime;
+
     return <div className='questions' key={question.id}>
     <ul className='list'>
       <li className='list_item'>
