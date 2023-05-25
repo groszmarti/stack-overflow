@@ -1,15 +1,11 @@
 package com.codecool.stackoverflowtw.service;
 
-import com.codecool.stackoverflowtw.controller.dto.NewAnswerDTO;
-import com.codecool.stackoverflowtw.controller.dto.QuestionDetailsDTO;
 import com.codecool.stackoverflowtw.dao.QuestionsDAO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
-import com.codecool.stackoverflowtw.database.Database;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -26,7 +22,7 @@ public class QuestionService {
         return  questionsDAO.getAllQuestions();
     }
 
-    public List<QuestionDetailsDTO> getQuestionById(int id) {
+    public QuestionDTO getQuestionById(int id) {
         // TODO
         return questionsDAO.getQuestionById(id);
     }
@@ -42,15 +38,6 @@ public class QuestionService {
         return createdId;
     }
 
-
-    public int addNewAnswer(int questionId, NewAnswerDTO answer) {
-        questionsDAO.addNewAnswer(questionId, answer);
-        return 1;
-    }
-
-    public boolean deleteAnswer(int answerId) {
-        return questionsDAO.deleteAnswer(answerId);
-    }
 
     public int editQuestion(int questionId, NewQuestionDTO question) {
         questionsDAO.editQuestion(questionId, question);

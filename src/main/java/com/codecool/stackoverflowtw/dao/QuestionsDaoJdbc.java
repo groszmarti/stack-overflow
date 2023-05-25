@@ -1,6 +1,5 @@
 package com.codecool.stackoverflowtw.dao;
 
-import com.codecool.stackoverflowtw.controller.dto.NewAnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
 
@@ -8,13 +7,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.codecool.stackoverflowtw.controller.dto.QuestionDetailsDTO;
 import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
 import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public List<QuestionDTO> getAllQuestions() {
-        String query = "SELECT question.id, question.title, question.description, question.date, COUNT(answer.id) as answer_count FROM question\n" +
+        String query = "SELECT question.id, question.title, question.description, question.date, question.time, COUNT(answer.id) as answer_count FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
                 "GROUP BY question.id\n" +
                 "ORDER BY question.date DESC";
@@ -58,9 +58,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
-                LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
+                LocalDate questionDate = resultSet.getTimestamp("date").toLocalDateTime().toLocalDate();
+                LocalTime questionTime = resultSet.getTimestamp("time").toLocalDateTime().toLocalTime();
                 int answerCount = resultSet.getInt("answer_count");
-                QuestionDTO question = new QuestionDTO(id, title, description, dateAndTime, answerCount);
+                QuestionDTO question = new QuestionDTO(id, title, description, questionDate, questionTime, answerCount);
                 questions.add(question);
             }
             for (QuestionDTO question : questions) {
@@ -74,46 +75,38 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     }
 
     @Override
-    public List<QuestionDetailsDTO> getQuestionById(int questionId) {
-        String query = "SELECT question.*, answer.answer as answer, answer.date as answer_date, answer.id as answer_id FROM question\n" +
+    public QuestionDTO getQuestionById(int questionId) {
+        String query = "SELECT question.*, COUNT(answer.id) as answer_count FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
-                "WHERE question.id = ?";
+                "WHERE question.id = ?" +
+                "GROUP BY question.id";
         try (Connection connection = database.getConnection()) {
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setInt(1, questionId);
             ResultSet resultSet = statement.executeQuery();
 
-            List<QuestionDetailsDTO> questions = new ArrayList<>();
             while (resultSet.next()) {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
-                LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
-                String answer = resultSet.getString("answer");
-                int answerId = resultSet.getInt("answer_id");
+                LocalDate questionDate = resultSet.getTimestamp("date").toLocalDateTime().toLocalDate();
+                LocalTime questionTime = resultSet.getTimestamp("time").toLocalDateTime().toLocalTime();
+                int answerCount = resultSet.getInt("answer_count");
 
-                LocalDateTime answerDate = null;
-
-                Timestamp nonFormattedAnswerDate = resultSet.getTimestamp("answer_date");
-                if (nonFormattedAnswerDate != null) {
-                    answerDate = nonFormattedAnswerDate.toLocalDateTime();
-                }
-
-                QuestionDetailsDTO question = new QuestionDetailsDTO(id, title, description, dateAndTime, answerId, answer, answerDate);
-                questions.add(question);
+                QuestionDTO question = new QuestionDTO(id, title, description, questionDate, questionTime, answerCount);
+                return question;
             }
-
-            return questions;
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
+        return null;
     }
 
     @Override
     public int addNewQuestion(NewQuestionDTO question) {
-        String query = "INSERT INTO question (title, description, date)" +
-                "VALUES (?, ?, ?)";
+        String query = "INSERT INTO question (title, description, date, time)" +
+                "VALUES (?, ?, ?, ?)";
         try {
             Connection connection = database.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -130,6 +123,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         statement.setString(1, title);
         statement.setString(2, description);
         statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
+        statement.setTime(4, Time.valueOf(LocalDateTime.now().toLocalTime()));
     }
 
     @Override
@@ -146,41 +140,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         }
     }
 
-    @Override
-    public int addNewAnswer(int questionId, NewAnswerDTO answer) {
-        String query = "INSERT INTO answer (question_id, answer, date)" +
-                "VALUES (?, ?, ?)";
-        try {
-            Connection connection = database.getConnection();
-            PreparedStatement statement = connection.prepareStatement(query);
-            prepareAnswer(questionId, answer.answer(), statement);
-            statement.executeUpdate();
-        }
-        catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-        return 1;
-    }
 
-    private void prepareAnswer(int questionId, String answer, PreparedStatement statement) throws SQLException {
-        statement.setInt(1, questionId);
-        statement.setString(2, answer);
-        statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
-    }
-
-    @Override
-    public Boolean deleteAnswer(int answerId) {
-        String query = "DELETE FROM answer WHERE id = ?";
-
-        try (Connection connection = database.getConnection();
-             PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(1, answerId);
-            statement.executeUpdate();
-            return true;
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
 
     @Override
     public void editQuestion(int questionId, NewQuestionDTO question) {

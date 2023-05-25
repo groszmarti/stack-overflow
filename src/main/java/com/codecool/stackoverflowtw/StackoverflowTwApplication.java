@@ -1,5 +1,7 @@
 package com.codecool.stackoverflowtw;
 
+import com.codecool.stackoverflowtw.dao.AnswerDAO;
+import com.codecool.stackoverflowtw.dao.AnswerDaoJdbc;
 import com.codecool.stackoverflowtw.dao.QuestionsDAO;
 import com.codecool.stackoverflowtw.dao.QuestionsDaoJdbc;
 import com.codecool.stackoverflowtw.database.Database;
@@ -18,11 +20,20 @@ public class StackoverflowTwApplication {
 
     @Bean
     public QuestionsDAO questionsDAO() {
-        QuestionsDAO questionDaoJdbc = new QuestionsDaoJdbc(new Database(
-                "jdbc:postgresql://localhost:5432/stackoverflow",
-                "postgres",
-                "postgres"));
+        QuestionsDAO questionDaoJdbc = new QuestionsDaoJdbc(createDataBase());
         questionDaoJdbc.initializeTables();
         return questionDaoJdbc;
+    }
+
+    @Bean
+    public AnswerDAO answerDAO() {
+        return new AnswerDaoJdbc(createDataBase());
+    }
+
+    public Database createDataBase() {
+        return new Database(
+                "jdbc:postgresql://localhost:5432/stackoverflow",
+                "postgres",
+                "postgres");
     }
 }

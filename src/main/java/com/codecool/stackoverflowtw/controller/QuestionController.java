@@ -1,9 +1,7 @@
 package com.codecool.stackoverflowtw.controller;
 
-import com.codecool.stackoverflowtw.controller.dto.NewAnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
-import com.codecool.stackoverflowtw.controller.dto.QuestionDetailsDTO;
 import com.codecool.stackoverflowtw.service.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,7 +24,7 @@ public class QuestionController {
     }
 
     @GetMapping("/{questionId}")
-    public List<QuestionDetailsDTO> getQuestionById(@PathVariable int questionId) {
+    public QuestionDTO getQuestionById(@PathVariable int questionId) {
         return questionService.getQuestionById(questionId);
     }
 
@@ -36,23 +34,12 @@ public class QuestionController {
         return 0;
     }
 
-    @PostMapping("/{questionId}")
-    public int addAnswerToQuestion(@PathVariable int questionId, @RequestBody NewAnswerDTO answer) {
-        questionService.addNewAnswer(questionId, answer);
-        return 0;
-    }
-
     @PatchMapping("/{questionId}")
     public int editQuestion(@PathVariable int questionId, @RequestBody NewQuestionDTO question) {
         questionService.editQuestion(questionId, question);
         return 1;
     }
 
-    @DeleteMapping("/{questionId}/{answerId}")
-    public boolean deleteAnswer(@PathVariable int answerId) {
-        questionService.deleteAnswer(answerId);
-        return true;
-    }
 
     @DeleteMapping("/{questionId}")
     public boolean deleteQuestionById(@PathVariable int questionId) {
