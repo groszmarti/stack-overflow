@@ -51,4 +51,9 @@ public class QuestionService {
     public boolean deleteAnswer(int answerId) {
         return questionsDAO.deleteAnswer(answerId);
     }
+
+    public int editQuestion(int questionId, QuestionDTO question) {
+        questionsDAO.editQuestion(questionId, question);
+        return 1;
+    }
 }
