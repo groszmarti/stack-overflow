@@ -61,11 +61,14 @@ const saveQuestion = (id, title, description) => {
 
 }
 
-const fetchQuestion = (id, setQuestionTitle, setQuestionDescription, setQuestionDate, setQuestion) => {
+const fetchQuestion = (id, setQuestionTitle, setQuestionDescription, setQuestionDate, setLoadPage) => {
   fetch(`/api/questions/${id}`)
       .then(res => res.json())
       .then(data => {
       console.log(data)
+      setQuestionTitle(data.title);
+      setQuestionDescription(data.description);
+      setLoadPage(true);
     })
 }
 
@@ -78,7 +81,7 @@ const fetchAnswer = (id, setQuestionAnswers) => {
 const ViewQuestion = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [question, setQuestion] = useState(null);
+  const [loadPage, setLoadPage] = useState(false);
   const [newAnswer, setNewAnswer] = useState('');
   const [questionTitle, setQuestionTitle] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
@@ -90,15 +93,15 @@ const ViewQuestion = () => {
   const answers = [];
 
   useEffect(() => {
-    fetchQuestion(id, setQuestionTitle, setQuestionDescription, setQuestionDate, setQuestion);
+    fetchQuestion(id, setQuestionTitle, setQuestionDescription, setQuestionDate, setLoadPage);
     /* fetchAnswer(id, setQuestionAnswers); */
   }, [id])
 
-  if(question === null){
+  if(loadPage === false){
     return <div>Loading...</div>
   }
 
-  question.map(element => {
+  /* question.map(element => {
     if(element.answer !== null){
       let answerDate = element.answerDate + " " + element.answerTime;
 
@@ -108,7 +111,7 @@ const ViewQuestion = () => {
         date: answerDate
       });
     }
-  })
+  }) */
 
   return <>
   
