@@ -79,9 +79,10 @@ const ViewQuestion = () => {
       .then(res => res.json())
       .then(data => {
         data.map(question => {
+          let created = question.createdDate + question.createdTime;
           setQuestionTitle(question.title);
           setQuestionDescription(question.description);
-          setQuestionDate(question.created);
+          setQuestionDate(created);
         })
 
         setQuestion(data)
@@ -107,7 +108,7 @@ const ViewQuestion = () => {
   <div className="question_card">
     {!isEdited ? <><div className='title'>{questionTitle}</div>
     <div className='description'>{questionDescription}</div>
-    <div className='date'>{questionDate.replace("T", " ")}</div>
+    <div className='date'>{questionDate}</div>
     <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button></> : 
     <><input value={questionTitle} onChange={(e) => {setQuestionTitle(e.target.value)}}></input><br/>
     <input value={questionDescription} onChange={(e) => {setQuestionDescription(e.target.value)}}></input><br/>
