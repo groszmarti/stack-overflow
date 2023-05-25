@@ -1,6 +1,5 @@
 package com.codecool.stackoverflowtw.dao;
 
-import com.codecool.stackoverflowtw.controller.dto.NewAnswerDTO;
 import com.codecool.stackoverflowtw.controller.dto.NewQuestionDTO;
 import com.codecool.stackoverflowtw.controller.dto.QuestionDTO;
 
@@ -8,13 +7,14 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
 
-import com.codecool.stackoverflowtw.controller.dto.QuestionDetailsDTO;
 import com.codecool.stackoverflowtw.database.Database;
 import com.codecool.stackoverflowtw.initialize_tables.TableInitializer;
 import com.codecool.stackoverflowtw.initialize_tables.TableStatements;
 
 import java.sql.*;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -46,7 +46,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public List<QuestionDTO> getAllQuestions() {
-        String query = "SELECT question.id, question.title, question.description, question.date, COUNT(answer.id) as answer_count FROM question\n" +
+        String query = "SELECT question.id, question.title, question.description, question.date, question.time, COUNT(answer.id) as answer_count FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
                 "GROUP BY question.id\n" +
                 "ORDER BY question.date DESC";
@@ -58,9 +58,10 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
-                LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
+                LocalDate questionDate = resultSet.getTimestamp("date").toLocalDateTime().toLocalDate();
+                LocalTime questionTime = resultSet.getTimestamp("time").toLocalDateTime().toLocalTime();
                 int answerCount = resultSet.getInt("answer_count");
-                QuestionDTO question = new QuestionDTO(id, title, description, dateAndTime, answerCount);
+                QuestionDTO question = new QuestionDTO(id, title, description, questionDate, questionTime, answerCount);
                 questions.add(question);
             }
             for (QuestionDTO question : questions) {
@@ -89,10 +90,11 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
                 int id = resultSet.getInt("id");
                 String title = resultSet.getString("title");
                 String description = resultSet.getString("description");
-                LocalDateTime dateAndTime = resultSet.getTimestamp("date").toLocalDateTime();
+                LocalDate questionDate = resultSet.getTimestamp("date").toLocalDateTime().toLocalDate();
+                LocalTime questionTime = resultSet.getTimestamp("time").toLocalDateTime().toLocalTime();
                 int answerCount = resultSet.getInt("answer_count");
 
-                QuestionDTO question = new QuestionDTO(id, title, description, dateAndTime, answerCount);
+                QuestionDTO question = new QuestionDTO(id, title, description, questionDate, questionTime, answerCount);
                 return question;
             }
         } catch (SQLException e) {
@@ -103,8 +105,8 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
 
     @Override
     public int addNewQuestion(NewQuestionDTO question) {
-        String query = "INSERT INTO question (title, description, date)" +
-                "VALUES (?, ?, ?)";
+        String query = "INSERT INTO question (title, description, date, time)" +
+                "VALUES (?, ?, ?, ?)";
         try {
             Connection connection = database.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
@@ -121,6 +123,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
         statement.setString(1, title);
         statement.setString(2, description);
         statement.setDate(3, Date.valueOf(LocalDateTime.now().toLocalDate()));
+        statement.setTime(4, Time.valueOf(LocalDateTime.now().toLocalTime()));
     }
 
     @Override
