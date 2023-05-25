@@ -33,7 +33,7 @@ public class AnswerDaoJdbc implements AnswerDAO{
 
             List<AnswerDTO> answers = new ArrayList<>();
             while (resultSet.next()) {
-                int id = resultSet.getInt("id");
+                int id = resultSet.getInt("answer_id");
                 int question_id = resultSet.getInt("question_id");
                 String answerText = resultSet.getString("answer");
                 LocalDate answerDate = null;
@@ -60,7 +60,7 @@ public class AnswerDaoJdbc implements AnswerDAO{
     @Override
     public int addNewAnswer(int questionId, NewAnswerDTO answer) {
         String query = "INSERT INTO answer (question_id, answer, date, time)" +
-                "VALUES (?, ?, ?)";
+                "VALUES (?, ?, ?, ?)";
         try {
             Connection connection = database.getConnection();
             PreparedStatement statement = connection.prepareStatement(query);
