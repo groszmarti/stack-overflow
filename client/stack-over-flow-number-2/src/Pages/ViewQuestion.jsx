@@ -129,7 +129,7 @@ const ViewQuestion = () => {
         <div className='answer_card'>
         <div className='description'>{answer.answer}</div>
         <div className='date'>{answer.createdDate + " " + answer.createdTime}</div>
-        <button className='buttons' onClick={() => {deleteAnswer(id, answer.answerId)}}>Delete Answer</button>
+        <button className='buttons' onClick={() => {deleteAnswer(id, answer.id)}}>Delete Answer</button>
         </div>
         </li>
       })
