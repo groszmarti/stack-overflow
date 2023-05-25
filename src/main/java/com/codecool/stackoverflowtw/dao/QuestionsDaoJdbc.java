@@ -78,7 +78,7 @@ public class QuestionsDaoJdbc implements QuestionsDAO {
     public QuestionDTO getQuestionById(int questionId) {
         String query = "SELECT question.*, COUNT(answer.id) as answer_count FROM question\n" +
                 "LEFT JOIN answer ON answer.question_id = question.id\n" +
-                "WHERE question.id = ?" +
+                "WHERE question.id = ?\n" +
                 "GROUP BY question.id";
         try (Connection connection = database.getConnection()) {
 

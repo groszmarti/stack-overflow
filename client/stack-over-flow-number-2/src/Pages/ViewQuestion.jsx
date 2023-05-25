@@ -61,49 +61,48 @@ const saveQuestion = (id, title, description) => {
 
 }
 
+const fetchQuestion = (id, setQuestionTitle, setQuestionDescription, setQuestionDate, setLoadPage, setQuestionAnswers) => {
+  fetch(`/api/questions/${id}`)
+      .then(res => res.json())
+      .then(data => {
+      let date = data.createdDate + " " + data.createdTime;
+
+      setQuestionTitle(data.title);
+      setQuestionDescription(data.description);
+      setQuestionDate(date);
+
+      if(data.answerCount !== 0){
+        fetchAnswer(id, setQuestionAnswers);
+      }
+      setLoadPage(true);
+    })
+}
+
+const fetchAnswer = (id, setQuestionAnswers) => {
+  fetch(`/api/questions/${id}/answers`)
+    .then(res => res.json())
+    .then(data => setQuestionAnswers(data))
+}
+
 const ViewQuestion = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [question, setQuestion] = useState(null);
+  const [loadPage, setLoadPage] = useState(false);
   const [newAnswer, setNewAnswer] = useState('');
   const [questionTitle, setQuestionTitle] = useState('');
   const [questionDescription, setQuestionDescription] = useState('');
   const [questionDate, setQuestionDate] = useState('');
+  const [questionAnswers, setQuestionAnswers] = useState([]);
 
   const [isEdited, setIsEdited] = useState(false);
 
-  const answers = [];
-
   useEffect(() => {
-    fetch(`/api/questions/${id}`)
-      .then(res => res.json())
-      .then(data => {
-        data.map(question => {
-          let created = question.createdDate + question.createdTime;
-          setQuestionTitle(question.title);
-          setQuestionDescription(question.description);
-          setQuestionDate(created);
-        })
-
-        setQuestion(data)
-      })
+    fetchQuestion(id, setQuestionTitle, setQuestionDescription, setQuestionDate, setLoadPage, setQuestionAnswers);
   }, [id])
 
-  if(question === null){
+  if(loadPage === false){
     return <div>Loading...</div>
   }
-
-  question.map(element => {
-    if(element.answer !== null){
-      let answerDate = element.answerDate + element.answerTime;
-
-      answers.push({
-        answerId : element.answerId,
-        answer: element.answer,
-        date: answerDate
-      });
-    }
-  })
 
   return <>
   
@@ -122,16 +121,15 @@ const ViewQuestion = () => {
 
   <div className='answers'>
     <ul className='list'>
-    {answers.length === 0 ? <div>No Answers</div> :
+    {questionAnswers.length === 0 ? <div>No Answers</div> :
       
-      answers.map(answer=> {
-        let answerDate = answer.date.replace('T', ' ');
+      questionAnswers.map(answer=> {
 
-        return <li className='list_item' key={answer.answerId}>
+        return <li className='list_item' key={answer.id}>
         <div className='answer_card'>
         <div className='description'>{answer.answer}</div>
-        <div className='date'>{answerDate}</div>
-        <button className='buttons' onClick={() => {deleteAnswer(id, answer.answerId)}}>Delete Answer</button>
+        <div className='date'>{answer.createdDate + " " + answer.createdTime}</div>
+        <button className='buttons' onClick={() => {deleteAnswer(id, answer.id)}}>Delete Answer</button>
         </div>
         </li>
       })
