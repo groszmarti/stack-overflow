@@ -60,3 +60,28 @@
   border-radius: 12px;
   align-items: center;
 }
+
+.questions {
+  background-color: lightcoral;
+  justify-content: center;
+}
+
+.question_title {
+  font-size: 5em;
+}
+
+.list_item {
+  display: flex;
+  justify-content: center;
+  padding: 10px;
+}
+
+.question_card {
+  width: auto;
+  align-items: center;
+}
+
+.counter, .date {
+  text-align: center;
+}
+
