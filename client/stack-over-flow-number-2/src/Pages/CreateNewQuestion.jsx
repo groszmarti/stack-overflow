@@ -1,5 +1,5 @@
-import { useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const addQuestion = (title, description, navigate) => {
 
@@ -10,17 +10,17 @@ const addQuestion = (title, description, navigate) => {
 
   postQuestion(newQuestion)
     .then(() => {
-      navigate("/");
+      navigate('/');
     });
 
 }
 
 const postQuestion = (newQuestion) => {
   
-  return fetch("/api/questions/", {
-    method: "POST",
+  return fetch('/api/questions/', {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
     },
     body: JSON.stringify(newQuestion),
   }).then((res) => res.json());
@@ -29,15 +29,17 @@ const postQuestion = (newQuestion) => {
 const CreateNewQuestion = () => {
   const navigate = useNavigate();
 
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const [title, setTitle] = useState('');
+  const [description, setDescription] = useState('');
 
   return <>
-    <div>What is your question?</div>
-    <input value={title} onChange={(e) => setTitle(e.target.value)}></input><br/>
-    <div>Description</div>
-    <input value={description} onChange={(e) => setDescription(e.target.value)}></input><br/>
-    <button type="submit" onClick={() => addQuestion(title, description, navigate)}>Add Question</button>
+  <div className='new_card'>
+    <div className='input_title'>What is your question?</div>
+    <input className='input' value={title} onChange={(e) => setTitle(e.target.value)}></input><br/>
+    <div className='input_title'>Description</div>
+    <input className='input' value={description} onChange={(e) => setDescription(e.target.value)}></input><br/>
+    <button className='buttons' type='submit' onClick={() => addQuestion(title, description, navigate)}>Add Question</button>
+  </div>
   </>
 }
 

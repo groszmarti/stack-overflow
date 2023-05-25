@@ -1,24 +1,24 @@
-import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useEffect, useState } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const deleteQuestion = (id, navigate) => {
   fetch(`/api/questions/${id}`, {
     method: 'DELETE',
   })
   .then(() => {
-    navigate("/");
+    navigate('/');
   });
 }
 
-const addAnswer = (id, newAnswer, navigate) => {
+const addAnswer = (id, newAnswer) => {
   const pushAnswer = {
     answer: newAnswer
   }
 
   fetch(`/api/questions/${id}`, {
-  method: "POST",
+  method: 'POST',
   headers: {
-    "Content-Type": "application/json",
+    'Content-Type': 'application/json',
   },
   body: JSON.stringify(pushAnswer),
   }).then(res => res.json()).then(() => window.location.reload())
@@ -101,35 +101,41 @@ const ViewQuestion = () => {
   })
 
   return <>
+    
   <button onClick={() => {editQuestion(id, setIsEdited)}}>Edit Question</button>
   
   <div className="question_card">
-    {!isEdited ? <><div>{questionTitle}</div>
-    <div>{questionDescription}</div></> : 
+    {!isEdited ? <><div className='title'>{questionTitle}</div>
+    <div className='description'>{questionDescription}</div></> : 
     <><input value={questionTitle} onChange={(e) => {setQuestionTitle(e.target.value)}}></input><br/>
     <input value={questionDescription} onChange={(e) => {setQuestionDescription(e.target.value)}}></input><br/>
     <button onClick={() => {deleteQuestion(id, navigate)}}>Delete Question</button>
     <button onClick={() => {saveQuestion(id, questionTitle, questionDescription)}}>Save</button></>}
+
   </div>
-  <div>
+
+  <div className='answers'>
+    <ul className='list'>
     {answers.length === 0 ? <div>No Answers</div> :
       
       answers.map(answer=> {
-        let answerDate = answer.date.replace("T", " ");
+        let answerDate = answer.date.replace('T', ' ');
 
-        return <div key={answer.answerId}>
-        <div>{answer.answer}</div>
-        <div>{answerDate}</div>
-        <button onClick={() => {deleteAnswer(id, answer.answerId)}}>Delete Answer</button>
+        return <li className='list_item' key={answer.answerId}>
+        <div className='answer_card'>
+        <div className='description'>{answer.answer}</div>
+        <div className='date'>{answerDate}</div>
+        <button className='buttons' onClick={() => {deleteAnswer(id, answer.answerId)}}>Delete Answer</button>
         </div>
-      }
-        
-      )
-      
+        </li>
+      })
     }
+    </ul>
   </div>
-  <input value={newAnswer} onChange={(e) => setNewAnswer(e.target.value)}></input><br/>
-  <button onClick={() => addAnswer(id, newAnswer, navigate)}>Add Comment</button>
+  <div className='new_card'>
+    <input className='input' value={newAnswer} onChange={(e) => setNewAnswer(e.target.value)}></input><br/>
+    <button className='buttons' onClick={() => addAnswer(id, newAnswer, navigate)}>Add Answer</button>
+  </div>
   </>
 }
 
