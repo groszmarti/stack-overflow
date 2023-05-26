@@ -93,4 +93,20 @@ public class AnswerDaoJdbc implements AnswerDAO{
             throw new RuntimeException(e);
         }
     }
+
+    @Override
+    public int editAnswer(int answerId, NewAnswerDTO answer) {
+        String query = "UPDATE answer\n" +
+                "SET answer = ?\n" +
+                "WHERE answer.id = ?";
+        try (Connection connection = database.getConnection()) {
+            PreparedStatement statement = connection.prepareStatement(query);
+            statement.setString(1, answer.answer());
+            statement.setInt(2, answerId);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return 0;
+    }
 }

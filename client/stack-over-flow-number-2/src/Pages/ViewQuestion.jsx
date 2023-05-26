@@ -124,7 +124,6 @@ const ViewQuestion = () => {
     {questionAnswers.length === 0 ? <div>No Answers</div> :
       
       questionAnswers.map(answer=> {
-
         return <li className='list_item' key={answer.id}>
         <div className='answer_card'>
         <div className='description'>{answer.answer}</div>

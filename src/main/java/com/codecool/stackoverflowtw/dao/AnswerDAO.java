@@ -13,4 +13,6 @@ public interface AnswerDAO {
     int addNewAnswer(int questionId, NewAnswerDTO answer);
 
     Boolean deleteAnswer(int answerId);
+
+    int editAnswer(int answerId, NewAnswerDTO answer);
 }
